@@ -1,14 +1,13 @@
 package com.shoppingapp.OnlineShoppingApp.controller;
 
 import com.shoppingapp.OnlineShoppingApp.exception.ProductAlreadyPresentException;
+import com.shoppingapp.OnlineShoppingApp.exception.ProductNotFoundException;
 import com.shoppingapp.OnlineShoppingApp.model.Product;
-import com.shoppingapp.OnlineShoppingApp.service.JwtService;
 import com.shoppingapp.OnlineShoppingApp.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,5 +53,12 @@ public class ProductController {
             return new ResponseEntity<>("Product record is updated from the table", HttpStatus.OK);
         }
         return new ResponseEntity<>("Product record is not updated from the table", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PutMapping("/{productName}/update/{pid}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> productStatusUpdate(@PathVariable String productName, @PathVariable("pid") int pid) throws ProductNotFoundException {
+        Product product = productService.productStatusUpdate(productName, pid);
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 }

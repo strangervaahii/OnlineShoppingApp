@@ -18,4 +18,6 @@ public interface ProductService {
     public boolean deleteProduct(int pid);
 
     List<Product> searchProduct(String productName) throws ProductNotFoundException;
+
+    Product productStatusUpdate(String product, int loginId) throws ProductNotFoundException;
 }

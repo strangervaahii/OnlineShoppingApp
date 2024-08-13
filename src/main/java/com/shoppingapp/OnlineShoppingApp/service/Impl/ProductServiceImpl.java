@@ -38,6 +38,7 @@ public class ProductServiceImpl implements ProductService {
         if (optional.isPresent()) {
             throw new ProductAlreadyPresentException();
         } else {
+            product.setProductStatus("In stock");
             return productRepository.saveAndFlush(product);
         }
     }
@@ -81,5 +82,18 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundException();
         }
         return search.get();
+    }
+
+    @Override
+    public Product productStatusUpdate(String productName, int productId) throws ProductNotFoundException{
+        Product product = productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+        if(product.getQuantity() == 0) {
+            product.setProductStatus("Out of Stock");
+        } else if(product.getQuantity() < 10) {
+            product.setProductStatus("Hurry to purchase");
+        } else {
+            product.setProductStatus("In stock");
+        }
+        return productRepository.save(product);
     }
 }
