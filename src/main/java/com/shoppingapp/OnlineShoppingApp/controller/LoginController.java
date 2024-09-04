@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1.0/shopping")
+@CrossOrigin("*")
 public class LoginController {
     @Autowired
     private final JwtService jwtService;
