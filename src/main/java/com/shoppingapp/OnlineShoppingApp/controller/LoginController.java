@@ -2,6 +2,7 @@ package com.shoppingapp.OnlineShoppingApp.controller;
 
 import com.shoppingapp.OnlineShoppingApp.model.UserInfo;
 import com.shoppingapp.OnlineShoppingApp.model.dto.AuthRequest;
+import com.shoppingapp.OnlineShoppingApp.model.dto.AuthResponse;
 import com.shoppingapp.OnlineShoppingApp.model.dto.Reset;
 import com.shoppingapp.OnlineShoppingApp.service.JwtService;
 import com.shoppingapp.OnlineShoppingApp.service.LoginService;
@@ -38,7 +39,10 @@ public class LoginController {
     public ResponseEntity<?> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getLoginId(), authRequest.getPassword()));
         if (authentication.isAuthenticated()) {
-            return ResponseEntity.ok(jwtService.generateToken(authRequest.getLoginId()));
+            AuthResponse authResponse=new AuthResponse();
+            authResponse.setToken(jwtService.generateToken(authRequest.getLoginId()));
+            authResponse.setRole(loginService.getUser(authRequest.getLoginId()).getRoles());
+            return ResponseEntity.ok(authResponse);
         } else {
             throw new UsernameNotFoundException("invalid user request!");
         }

@@ -5,6 +5,7 @@ import com.shoppingapp.OnlineShoppingApp.repository.ProductRepository;
 import com.shoppingapp.OnlineShoppingApp.repository.UserInfoRepository;
 import com.shoppingapp.OnlineShoppingApp.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,11 @@ public class LoginServiceImpl implements LoginService {
         userInfo.setConfirmPassword(passwordEncoder.encode(userInfo.getConfirmPassword()));
         userInfoRepository.save(userInfo);
         return userInfo;
+    }
+
+    @Override
+    public UserInfo getUser(String loginId) throws UsernameNotFoundException{
+        return userInfoRepository.findByLoginId(loginId).orElseThrow(()->new UsernameNotFoundException("User Not Found"));
     }
 
     @Override

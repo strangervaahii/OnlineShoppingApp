@@ -23,5 +23,6 @@ public class Product {
     private int price;
     private String features;
     private int quantity;
+    private String imageUrl;
     private String productStatus;
 }
