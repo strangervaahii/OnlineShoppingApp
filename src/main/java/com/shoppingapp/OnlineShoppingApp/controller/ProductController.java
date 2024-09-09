@@ -38,10 +38,10 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping("/delete/{pid}")
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> deleteProduct(@PathVariable("pid") int pid) {
-        if (productService.deleteProduct(pid)) {
+    public ResponseEntity<String> deleteProduct(@PathVariable("id") int id) {
+        if (productService.deleteProduct(id)) {
             return new ResponseEntity<>("Product deleted from the table", HttpStatus.OK);
         }
         return new ResponseEntity<>("Product is not deleted from the table", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -49,11 +49,8 @@ public class ProductController {
 
     @PutMapping("/update/{pid}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> updateProduct(@RequestBody Product product, @PathVariable("pid") int pid) {
-        if (productService.updateProduct(product, pid)) {
-            return new ResponseEntity<>("Product record is updated from the table", HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Product record is not updated from the table", HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<?> updateProduct(@RequestBody Product product, @PathVariable("pid") int pid)throws ProductNotFoundException{
+            return new ResponseEntity<>(productService.updateProduct(product, pid), HttpStatus.OK);
     }
 
     @PutMapping("/{productName}/update/{pid}")

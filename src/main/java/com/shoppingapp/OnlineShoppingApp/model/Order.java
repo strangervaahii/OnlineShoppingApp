@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.sql.Timestamp;
 
 @Entity
 @Data
@@ -17,8 +20,11 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderId;
     private String loginId;
-    private int productId;
+    private int id;
     private String productName;
     private int price;
     private int quantity;
+    private String imageUrl;
+    @CreationTimestamp
+    private Timestamp date;
 }

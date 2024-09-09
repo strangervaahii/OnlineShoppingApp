@@ -24,11 +24,21 @@ public class OrderController {
     public ResponseEntity<?> placeOrder(@RequestBody Order order) throws OrderNotFoundException {
         return new ResponseEntity<>(orderService.placeOrder(order), HttpStatus.CREATED);
     }
-
     @GetMapping("/orders/{loginId}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<?> getAllOrders(@PathVariable String loginId) throws OrderNotFoundException {
+    public ResponseEntity<?> getAllOrdersByUser(@PathVariable String loginId) throws OrderNotFoundException {
         List<Order> orderList = orderService.getAllOrdersByUser(loginId);
+        if (orderList != null) {
+            return new ResponseEntity<>(orderList, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("order list is empty", HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @GetMapping("/allorders")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> getAllOrders() throws OrderNotFoundException {
+        List<Order> orderList = orderService.getAllOrders();
         if (orderList != null) {
             return new ResponseEntity<>(orderList, HttpStatus.OK);
         } else {

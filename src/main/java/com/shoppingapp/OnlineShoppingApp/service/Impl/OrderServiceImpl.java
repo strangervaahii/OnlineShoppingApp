@@ -25,7 +25,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order placeOrder(Order order) throws OrderNotFoundException {
-        Product product = productRepository.findById(order.getProductId()).orElseThrow(() -> new OrderNotFoundException("Invalid product"));
+        Product product = productRepository.findById(order.getId()).orElseThrow(() -> new OrderNotFoundException("Invalid product"));
         if (order.getQuantity() <= product.getQuantity()) {
             product.setQuantity(product.getQuantity() - order.getQuantity());
             productRepository.save(product);
@@ -33,5 +33,24 @@ public class OrderServiceImpl implements OrderService {
             return orderRepository.save(order);
         }
         throw new OrderNotFoundException("Order not placed");
+    }
+
+    @Override
+    public void cartOrders(List<Order> orderList) throws OrderNotFoundException {
+        for (Order order:
+             orderList) {
+            Product product = productRepository.findById(order.getId()).orElseThrow(() -> new OrderNotFoundException("Invalid product"));
+            if (order.getQuantity() <= product.getQuantity()) {
+                product.setQuantity(product.getQuantity() - order.getQuantity());
+                productRepository.save(product);
+                order.setPrice(product.getPrice() * order.getQuantity());
+                orderRepository.save(order);
+            }
+        }
+    }
+
+    @Override
+    public List<Order> getAllOrders() throws OrderNotFoundException {
+        return orderRepository.findAll();
     }
 }

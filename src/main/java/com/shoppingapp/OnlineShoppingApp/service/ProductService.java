@@ -13,7 +13,7 @@ public interface ProductService {
 
     public Product getProductById(int pid);
 
-    public boolean updateProduct(Product product, int pid);
+    public Product updateProduct(Product product, int pid) throws ProductNotFoundException;
 
     public boolean deleteProduct(int pid);
 

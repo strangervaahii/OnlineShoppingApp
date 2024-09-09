@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product addProduct(Product product) throws ProductAlreadyPresentException {
-        Optional<Product> optional = productRepository.findById(product.getProductId());
+        Optional<Product> optional = productRepository.findById(product.getId());
         if (optional.isPresent()) {
             throw new ProductAlreadyPresentException();
         } else {
@@ -53,21 +53,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean updateProduct(Product product, int pid) {
-
-        Product existingProduct = productRepository.getById(pid);
-        if (existingProduct != null) {
-            existingProduct.setProductName(product.getProductName());
-            existingProduct.setProductName(product.getProductDesc());
-            existingProduct.setPrice(product.getPrice());
-            existingProduct.setFeatures(product.getFeatures());
-            existingProduct.setQuantity(product.getQuantity());
-            existingProduct.setImageUrl(product.getImageUrl());
-            existingProduct.setProductStatus(product.getProductStatus());
-            productRepository.saveAndFlush(existingProduct);
-            return true;
-        }
-        return false;
+    public Product updateProduct(Product product, int pid) throws ProductNotFoundException{
+        Product existingProduct = productRepository.findById(pid).orElseThrow(ProductNotFoundException::new);
+        existingProduct.setProductName(product.getProductName());
+        existingProduct.setProductDesc(product.getProductDesc());
+        existingProduct.setPrice(product.getPrice());
+        existingProduct.setFeatures(product.getFeatures());
+        existingProduct.setQuantity(product.getQuantity());
+        existingProduct.setImageUrl(product.getImageUrl());
+        existingProduct.setProductStatus(product.getProductStatus());
+        return productRepository.saveAndFlush(existingProduct);
     }
 
     @Override

@@ -12,4 +12,8 @@ public interface OrderService {
     public List<Order> getAllOrdersByUser(String loginId) throws OrderNotFoundException;
 
     public Order placeOrder(Order order) throws OrderNotFoundException;
+
+    public void cartOrders(List<Order> orderList) throws OrderNotFoundException;
+
+    public List<Order> getAllOrders() throws OrderNotFoundException;
 }
