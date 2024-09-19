@@ -16,7 +16,6 @@ public class LoginServiceImpl implements LoginService {
     private ProductRepository productRepository;
     @Autowired
     private UserInfoRepository userInfoRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
